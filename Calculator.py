@@ -402,51 +402,51 @@ class Trigo_Window(QMainWindow):
  
    def button_create2(self):
       self.trig_layout2 = QGridLayout()
-      self.trig_button1 =QPushButton("tan\u03B8")
+      self.trig_button1 =QPushButton("tanθ")
       self.trig_button1.setFixedSize(100,60)
       self.trig_button1.setFont(self.font2)
 
-      self.trig_button2 =QPushButton("sin\u03B8")
+      self.trig_button2 =QPushButton("sinθ")
       self.trig_button2.setFixedSize(100,60)
       self.trig_button2.setFont(self.font2)
 
-      self.trig_button3 =QPushButton("cos\u03B8")
+      self.trig_button3 =QPushButton("cosθ")
       self.trig_button3.setFixedSize(100,60)
       self.trig_button3.setFont(self.font2)
 
-      self.trig_button4 =QPushButton("cot\u03B8")
+      self.trig_button4 =QPushButton("cotθ")
       self.trig_button4.setFixedSize(100,60)
       self.trig_button4.setFont(self.font2)
 
-      self.trig_button5 =QPushButton("cosec\u03B8")
+      self.trig_button5 =QPushButton("cosecθ")
       self.trig_button5.setFixedSize(100,60)
       self.trig_button5.setFont(self.font2)
 
-      self.trig_button6 =QPushButton("sec\u03B8")
+      self.trig_button6 =QPushButton("secθ")
       self.trig_button6.setFixedSize(100,60)
       self.trig_button6.setFont(self.font2)
 
-      self.trig_button7 =QPushButton("tan⁻¹\u03B8")
+      self.trig_button7 =QPushButton("tan⁻¹θ")
       self.trig_button7.setFixedSize(100,60)
       self.trig_button7.setFont(self.font2)
 
-      self.trig_button8 =QPushButton("sin⁻¹\u03B8")
+      self.trig_button8 =QPushButton("sin⁻¹θ")
       self.trig_button8.setFixedSize(100,60)
       self.trig_button8.setFont(self.font2)
 
-      self.trig_button9 =QPushButton("cos⁻¹\u03B8")
+      self.trig_button9 =QPushButton("cos⁻¹θ")
       self.trig_button9.setFixedSize(100,60)
       self.trig_button9.setFont(self.font2)
 
-      self.trig_button10 =QPushButton("cot⁻¹\u03B8")
+      self.trig_button10 =QPushButton("cot⁻¹θ")
       self.trig_button10.setFixedSize(100,60)
       self.trig_button10.setFont(self.font2)
 
-      self.trig_button11 =QPushButton("cosec⁻¹\u03B8")
+      self.trig_button11 =QPushButton("cosec⁻¹θ")
       self.trig_button11.setFixedSize(100,60)
       self.trig_button11.setFont(self.font2)
 
-      self.trig_button12=QPushButton("sec⁻¹\u03B8")
+      self.trig_button12=QPushButton("sec⁻¹θ")
       self.trig_button12.setFixedSize(100,60)
       self.trig_button12.setFont(self.font2)
 
@@ -548,11 +548,22 @@ class Trigo_Window(QMainWindow):
       self.num_button9.clicked.connect(partial(self.expression_maker,"3"))
       self.num_button10.clicked.connect(partial(self.expression_maker,"0"))
 
+      self.trig_button1.clicked.connect(partial(self.trigo_brain,"tanθ"))
+      self.trig_button1.clicked.connect(partial(self.trigo_brain,"sinθ"))
+      self.trig_button1.clicked.connect(partial(self.trigo_brain,"cosθ"))
+      self.trig_button1.clicked.connect(partial(self.trigo_brain,"cotθ"))
+      self.trig_button1.clicked.connect(partial(self.trigo_brain,"cosecθ"))
+      self.trig_button1.clicked.connect(partial(self.trigo_brain,"secθ"))
+
+
+
    def expression_maker(self,button_pressed):
       self.expression_str = self.expression_str + button_pressed
       print(self.expression_str)
+      self.input_box2.setText(self.expression_str)
 
-
+   def trigo_brain(self,button_pressed):
+      print(button_pressed)
 
 
 def main():
