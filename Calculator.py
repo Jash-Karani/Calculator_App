@@ -9,9 +9,12 @@ from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow
 from PyQt5.QtWidgets import QFormLayout
 from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QStatusBar
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QWidget
 from functools import partial
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize, pyqtSignal
 from PyQt5 import QtGui
 import copy
@@ -381,7 +384,7 @@ class Trigo_Window(QMainWindow):
       super().__init__()
       self.setWindowTitle('Trigo calculator')
       self.trig_layout = QVBoxLayout()
-      self.setFixedSize(750,350)
+      self.setFixedSize(840,350)
       self.main_widget2 = QWidget()
       self.setCentralWidget(self.main_widget2)
       self.main_widget2.setLayout(self.trig_layout)
@@ -399,6 +402,10 @@ class Trigo_Window(QMainWindow):
       self.font3.setPointSize(20)             
       self.input_box2.setFont(self.font2)
       self.input_box2.setAlignment(Qt.AlignLeft)
+
+      self.trig_status=QLabel()
+      self.trig_status.setPixmap(QPixmap("initial.png"))        
+
  
    def button_create2(self):
       self.trig_layout2 = QGridLayout()
@@ -464,62 +471,68 @@ class Trigo_Window(QMainWindow):
       self.trig_layout2.addWidget(self.trig_button12,3,2) 
 
       self.vertical_line = QLabel()
-      self.vertical_line.setText(" | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n")   
+      self.vertical_line.setText(" | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n")   
       self.trig_layout2.addWidget(self.vertical_line,0,3,4,1) 
-      
+
       self.num_button1 = QPushButton("7")
-      self.num_button1.setFixedSize(60,60)
+      self.num_button1.setFixedSize(85,60)
       self.num_button1.setFont(self.font3)  
 
       self.num_button2 =QPushButton("8")
-      self.num_button2.setFixedSize(60,60)
+      self.num_button2.setFixedSize(85,60)
       self.num_button2.setFont(self.font3)
 
       self.num_button3 =QPushButton("9")
-      self.num_button3.setFixedSize(60,60)
+      self.num_button3.setFixedSize(85,60)
       self.num_button3.setFont(self.font3)
 
       self.num_button4 =QPushButton("4")
-      self.num_button4.setFixedSize(60,60)
+      self.num_button4.setFixedSize(85,60)
       self.num_button4.setFont(self.font3)
 
       self.num_button5 =QPushButton("5")
-      self.num_button5.setFixedSize(60,60)
+      self.num_button5.setFixedSize(85,60)
       self.num_button5.setFont(self.font3)
 
       self.num_button6 =QPushButton("6")
-      self.num_button6.setFixedSize(60,60)
+      self.num_button6.setFixedSize(85,60)
       self.num_button6.setFont(self.font3)
 
       self.num_button7 =QPushButton("1")
-      self.num_button7.setFixedSize(60,60)
+      self.num_button7.setFixedSize(85,60)
       self.num_button7.setFont(self.font3)
 
       self.num_button8 =QPushButton("2")
-      self.num_button8.setFixedSize(60,60)
+      self.num_button8.setFixedSize(85,60)
       self.num_button8.setFont(self.font3)
 
       self.num_button9 =QPushButton("3")
-      self.num_button9.setFixedSize(60,60)
+      self.num_button9.setFixedSize(85,60)
       self.num_button9.setFont(self.font3)
 
       self.num_button10 =QPushButton("0")
-      self.num_button10.setFixedSize(60,60)
+      self.num_button10.setFixedSize(85,60)
       self.num_button10.setFont(self.font3)   
 
       self.num_button11 =QPushButton(".")
-      self.num_button11.setFixedSize(60,60)
+      self.num_button11.setFixedSize(85,60)
       self.num_button11.setFont(self.font3)
 
       self.num_button12 =QPushButton("-")
-      self.num_button12.setFixedSize(60,60)
+      self.num_button12.setFixedSize(85,60)
       self.num_button12.setFont(self.font3)        
 
       self.num_button13 =QPushButton("𝝅")
-      self.num_button13.setFixedSize(100,200)
+      self.num_button13.setFixedSize(100,150)
       self.num_button13.setFont(self.font3)  
 
-      self.trig_layout2.addWidget(self.input_box2,0,5,1,6)
+      self.num_button14 =QPushButton("C")
+      self.num_button14.setFixedSize(100,60)
+      self.num_button14.setFont(self.font3)  
+
+      self.trig_layout2.addWidget(self.input_box2,0,6,1,5)
+      self.trig_layout2.addWidget(self.trig_status,0,5,1,1)      
+
       self.trig_layout2.addWidget(self.num_button1,1,5)
       self.trig_layout2.addWidget(self.num_button2,1,6)
       self.trig_layout2.addWidget(self.num_button3,1,7)
@@ -532,7 +545,8 @@ class Trigo_Window(QMainWindow):
       self.trig_layout2.addWidget(self.num_button8,3,6)
       self.trig_layout2.addWidget(self.num_button9,3,7)
       self.trig_layout2.addWidget(self.num_button11,3,8)
-      self.trig_layout2.addWidget(self.num_button13,1,9,3,2)
+      self.trig_layout2.addWidget(self.num_button14,1,9,1,2)
+      self.trig_layout2.addWidget(self.num_button13,2,9,2,2)
 
       self.trig_layout.addLayout(self.trig_layout2)
 
@@ -549,11 +563,17 @@ class Trigo_Window(QMainWindow):
       self.num_button10.clicked.connect(partial(self.expression_maker,"0"))
 
       self.trig_button1.clicked.connect(partial(self.trigo_brain,"tanθ"))
-      self.trig_button1.clicked.connect(partial(self.trigo_brain,"sinθ"))
-      self.trig_button1.clicked.connect(partial(self.trigo_brain,"cosθ"))
-      self.trig_button1.clicked.connect(partial(self.trigo_brain,"cotθ"))
-      self.trig_button1.clicked.connect(partial(self.trigo_brain,"cosecθ"))
-      self.trig_button1.clicked.connect(partial(self.trigo_brain,"secθ"))
+      self.trig_button2.clicked.connect(partial(self.trigo_brain,"sinθ"))
+      self.trig_button3.clicked.connect(partial(self.trigo_brain,"cosθ"))
+      self.trig_button4.clicked.connect(partial(self.trigo_brain,"cotθ"))
+      self.trig_button5.clicked.connect(partial(self.trigo_brain,"cosecθ"))
+      self.trig_button6.clicked.connect(partial(self.trigo_brain,"secθ"))
+      self.trig_button7.clicked.connect(partial(self.trigo_brain,"tan⁻¹θ"))
+      self.trig_button8.clicked.connect(partial(self.trigo_brain,"sin⁻¹θ"))
+      self.trig_button9.clicked.connect(partial(self.trigo_brain,"cos⁻¹θ"))
+      self.trig_button10.clicked.connect(partial(self.trigo_brain,"cot⁻¹θ"))
+      self.trig_button11.clicked.connect(partial(self.trigo_brain,"cosec⁻¹θ"))
+      self.trig_button12.clicked.connect(partial(self.trigo_brain,"sec⁻¹θ"))
 
 
 
@@ -564,6 +584,15 @@ class Trigo_Window(QMainWindow):
 
    def trigo_brain(self,button_pressed):
       print(button_pressed)
+      if button_pressed == "sinθ":
+         self.trig_status.setPixmap(QPixmap("sin.png"))  
+      
+      if button_pressed == "cosθ":
+         self.trig_status.setPixmap(QPixmap("cos.png"))
+
+   
+
+
 
 
 def main():
