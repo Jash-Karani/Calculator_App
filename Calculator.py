@@ -377,10 +377,11 @@ class Calculator(QMainWindow):
 
 class Trigo_Window(QMainWindow):
    def __init__(self):
+      self.expression_str=""
       super().__init__()
       self.setWindowTitle('Trigo calculator')
       self.trig_layout = QVBoxLayout()
-      self.setFixedSize(400,400)
+      self.setFixedSize(750,350)
       self.main_widget2 = QWidget()
       self.setCentralWidget(self.main_widget2)
       self.main_widget2.setLayout(self.trig_layout)
@@ -392,16 +393,15 @@ class Trigo_Window(QMainWindow):
    def input_box_create2(self):
       self.input_box2=QLineEdit()
       self.input_box2.setFixedHeight(40)
-      self.font2 = self.input_box2.font()      
-      self.font2.setPointSize(12)             
+      self.font2 = self.input_box2.font()     
+      self.font3 = self.input_box2.font() 
+      self.font2.setPointSize(12)
+      self.font3.setPointSize(20)             
       self.input_box2.setFont(self.font2)
       self.input_box2.setAlignment(Qt.AlignLeft)
-      self.input_box2.isReadOnly()
-      self.trig_layout.addWidget(self.input_box2)
-   
+ 
    def button_create2(self):
       self.trig_layout2 = QGridLayout()
-      
       self.trig_button1 =QPushButton("tan\u03B8")
       self.trig_button1.setFixedSize(100,60)
       self.trig_button1.setFont(self.font2)
@@ -461,13 +461,98 @@ class Trigo_Window(QMainWindow):
       self.trig_layout2.addWidget(self.trig_button9,2,2)
       self.trig_layout2.addWidget(self.trig_button10,3,0)  
       self.trig_layout2.addWidget(self.trig_button11,3,1)  
-      self.trig_layout2.addWidget(self.trig_button12,3,2)    
+      self.trig_layout2.addWidget(self.trig_button12,3,2) 
 
+      self.vertical_line = QLabel()
+      self.vertical_line.setText(" | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n | | | | | \n")   
+      self.trig_layout2.addWidget(self.vertical_line,0,3,4,1) 
       
+      self.num_button1 = QPushButton("7")
+      self.num_button1.setFixedSize(60,60)
+      self.num_button1.setFont(self.font3)  
+
+      self.num_button2 =QPushButton("8")
+      self.num_button2.setFixedSize(60,60)
+      self.num_button2.setFont(self.font3)
+
+      self.num_button3 =QPushButton("9")
+      self.num_button3.setFixedSize(60,60)
+      self.num_button3.setFont(self.font3)
+
+      self.num_button4 =QPushButton("4")
+      self.num_button4.setFixedSize(60,60)
+      self.num_button4.setFont(self.font3)
+
+      self.num_button5 =QPushButton("5")
+      self.num_button5.setFixedSize(60,60)
+      self.num_button5.setFont(self.font3)
+
+      self.num_button6 =QPushButton("6")
+      self.num_button6.setFixedSize(60,60)
+      self.num_button6.setFont(self.font3)
+
+      self.num_button7 =QPushButton("1")
+      self.num_button7.setFixedSize(60,60)
+      self.num_button7.setFont(self.font3)
+
+      self.num_button8 =QPushButton("2")
+      self.num_button8.setFixedSize(60,60)
+      self.num_button8.setFont(self.font3)
+
+      self.num_button9 =QPushButton("3")
+      self.num_button9.setFixedSize(60,60)
+      self.num_button9.setFont(self.font3)
+
+      self.num_button10 =QPushButton("0")
+      self.num_button10.setFixedSize(60,60)
+      self.num_button10.setFont(self.font3)   
+
+      self.num_button11 =QPushButton(".")
+      self.num_button11.setFixedSize(60,60)
+      self.num_button11.setFont(self.font3)
+
+      self.num_button12 =QPushButton("-")
+      self.num_button12.setFixedSize(60,60)
+      self.num_button12.setFont(self.font3)        
+
+      self.num_button13 =QPushButton("𝝅")
+      self.num_button13.setFixedSize(100,200)
+      self.num_button13.setFont(self.font3)  
+
+      self.trig_layout2.addWidget(self.input_box2,0,5,1,6)
+      self.trig_layout2.addWidget(self.num_button1,1,5)
+      self.trig_layout2.addWidget(self.num_button2,1,6)
+      self.trig_layout2.addWidget(self.num_button3,1,7)
+      self.trig_layout2.addWidget(self.num_button10,1,8)
+      self.trig_layout2.addWidget(self.num_button4,2,5)
+      self.trig_layout2.addWidget(self.num_button5,2,6)
+      self.trig_layout2.addWidget(self.num_button6,2,7)
+      self.trig_layout2.addWidget(self.num_button12,2,8)
+      self.trig_layout2.addWidget(self.num_button7,3,5)
+      self.trig_layout2.addWidget(self.num_button8,3,6)
+      self.trig_layout2.addWidget(self.num_button9,3,7)
+      self.trig_layout2.addWidget(self.num_button11,3,8)
+      self.trig_layout2.addWidget(self.num_button13,1,9,3,2)
+
       self.trig_layout.addLayout(self.trig_layout2)
 
    def control2(self):
-      pass
+      self.num_button1.clicked.connect(partial(self.expression_maker,"7"))
+      self.num_button2.clicked.connect(partial(self.expression_maker,"8"))
+      self.num_button3.clicked.connect(partial(self.expression_maker,"9"))
+      self.num_button4.clicked.connect(partial(self.expression_maker,"4"))
+      self.num_button5.clicked.connect(partial(self.expression_maker,"5"))
+      self.num_button6.clicked.connect(partial(self.expression_maker,"6"))
+      self.num_button7.clicked.connect(partial(self.expression_maker,"1"))
+      self.num_button8.clicked.connect(partial(self.expression_maker,"2"))
+      self.num_button9.clicked.connect(partial(self.expression_maker,"3"))
+      self.num_button10.clicked.connect(partial(self.expression_maker,"0"))
+
+   def expression_maker(self,button_pressed):
+      self.expression_str = self.expression_str + button_pressed
+      print(self.expression_str)
+
+
 
 
 def main():
