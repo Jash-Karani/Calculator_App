@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QLabel
-from PyQt5.QtWidgets import QLineEdit
+from PyQt5.QtWidgets import QLineEdit,QCheckBox
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QPushButton
@@ -381,10 +381,11 @@ class Calculator(QMainWindow):
 class Trigo_Window(QMainWindow):
    def __init__(self):
       self.expression_str=""
+      self.trig_function_selected = ""
       super().__init__()
       self.setWindowTitle('Trigo calculator')
       self.trig_layout = QVBoxLayout()
-      self.setFixedSize(840,350)
+      self.setFixedSize(880,400)
       self.main_widget2 = QWidget()
       self.setCentralWidget(self.main_widget2)
       self.main_widget2.setLayout(self.trig_layout)
@@ -398,15 +399,19 @@ class Trigo_Window(QMainWindow):
       self.input_box2.setFixedHeight(40)
       self.font2 = self.input_box2.font()     
       self.font3 = self.input_box2.font() 
-      self.font2.setPointSize(12)
-      self.font3.setPointSize(20)             
+      self.font4 = self.input_box2.font() 
+      self.font2.setPointSize(14)
+      self.font3.setPointSize(20)  
+      self.font4.setPointSize(9)           
       self.input_box2.setFont(self.font2)
       self.input_box2.setAlignment(Qt.AlignLeft)
 
-      self.trig_status=QLabel()
-      self.trig_status.setPixmap(QPixmap("initial.png"))        
+      self.trig_status = QLabel()
+      self.trig_status.setPixmap(QPixmap("initial.png"))      
 
- 
+      self.degree_radian = QLabel()
+      self.degree_radian.setPixmap(QPixmap("degree"))
+
    def button_create2(self):
       self.trig_layout2 = QGridLayout()
       self.trig_button1 =QPushButton("tanθ")
@@ -456,6 +461,9 @@ class Trigo_Window(QMainWindow):
       self.trig_button12=QPushButton("sec⁻¹θ")
       self.trig_button12.setFixedSize(100,60)
       self.trig_button12.setFont(self.font2)
+
+      self.degree_button=QPushButton("degree(θ°)")
+      self.radian_button=QPushButton("radian(θᶜ)")
 
       self.trig_layout2.addWidget(self.trig_button1,0,0)
       self.trig_layout2.addWidget(self.trig_button2,0,1)
@@ -530,8 +538,11 @@ class Trigo_Window(QMainWindow):
       self.num_button14.setFixedSize(100,60)
       self.num_button14.setFont(self.font3)  
 
-      self.trig_layout2.addWidget(self.input_box2,0,6,1,5)
-      self.trig_layout2.addWidget(self.trig_status,0,5,1,1)      
+      self.trig_layout2.addWidget(self.input_box2,0,6,1,3)
+      self.trig_layout2.addWidget(self.trig_status,0,5,1,1)
+      self.trig_layout2.addWidget(self.degree_radian,0,9,1,2)
+      self.trig_layout2.addWidget(self.radian_button,4,0)
+      self.trig_layout2.addWidget(self.degree_button,4,1)
 
       self.trig_layout2.addWidget(self.num_button1,1,5)
       self.trig_layout2.addWidget(self.num_button2,1,6)
@@ -561,6 +572,9 @@ class Trigo_Window(QMainWindow):
       self.num_button8.clicked.connect(partial(self.expression_maker,"2"))
       self.num_button9.clicked.connect(partial(self.expression_maker,"3"))
       self.num_button10.clicked.connect(partial(self.expression_maker,"0"))
+      self.num_button13.clicked.connect(partial(self.expression_maker,"𝝅"))
+      self.num_button12.clicked.connect(partial(self.expression_maker,"-"))
+      self.num_button11.clicked.connect(partial(self.expression_maker,"."))
 
       self.trig_button1.clicked.connect(partial(self.trigo_brain,"tanθ"))
       self.trig_button2.clicked.connect(partial(self.trigo_brain,"sinθ"))
@@ -575,7 +589,8 @@ class Trigo_Window(QMainWindow):
       self.trig_button11.clicked.connect(partial(self.trigo_brain,"cosec⁻¹θ"))
       self.trig_button12.clicked.connect(partial(self.trigo_brain,"sec⁻¹θ"))
 
-
+      self.degree_button.clicked.connect(self.radian_to_degree)
+      self.radian_button.clicked.connect(self.degree_to_radian)
 
    def expression_maker(self,button_pressed):
       self.expression_str = self.expression_str + button_pressed
@@ -586,15 +601,59 @@ class Trigo_Window(QMainWindow):
       print(button_pressed)
       if button_pressed == "sinθ":
          self.trig_status.setPixmap(QPixmap("sin.png"))  
+         self.trig_function_selected = "sinθ"
       
       if button_pressed == "cosθ":
          self.trig_status.setPixmap(QPixmap("cos.png"))
+         self.trig_function_selected = "cosθ"
 
+      if button_pressed == "tanθ":
+         self.trig_status.setPixmap(QPixmap("tan.png"))
+         self.trig_function_selected = "tanθ"            
+
+      if button_pressed == "secθ":
+         self.trig_status.setPixmap(QPixmap("sec.png"))
+         self.trig_function_selected = "secθ"
+
+      if button_pressed == "cosecθ":
+         self.trig_status.setPixmap(QPixmap("cosec.png"))
+         self.trig_function_selected = "cosecθ"
+
+      if button_pressed == "cotθ":
+         self.trig_status.setPixmap(QPixmap("cot.png"))
+         self.trig_function_selected = "cotθ"
+
+      if button_pressed == "sin⁻¹θ":
+         self.trig_status.setPixmap(QPixmap("sin_inverse.png"))  
+         self.trig_function_selected = "sin⁻¹θ"
+
+      if button_pressed == "cos⁻¹θ":
+         self.trig_status.setPixmap(QPixmap("cos_inverse.png"))
+         self.trig_function_selected = "cos⁻¹θ"
+
+      if button_pressed == "tan⁻¹θ":
+         self.trig_status.setPixmap(QPixmap("tan_inverse.png"))
+         self.trig_function_selected = "tan⁻¹θ"
+
+      if button_pressed == "sec⁻¹θ":
+         self.trig_status.setPixmap(QPixmap("sec_inverse.png"))
+         self.trig_function_selected = "sec⁻¹θ"
+
+      if button_pressed == "cosec⁻¹θ":
+         self.trig_status.setPixmap(QPixmap("cosec_inverse.png"))
+         self.trig_function_selected = "cosec⁻¹θ"
+
+      if button_pressed == "cot⁻¹θ":
+         self.trig_status.setPixmap(QPixmap("cot_inverse.png"))   
+         self.trig_function_selected = "cot⁻¹θ"
+
+   def degree_to_radian(self):
+      self.degree_radian.setPixmap(QPixmap("radians"))
    
-
-
-
-
+   def radian_to_degree(self):
+      self.degree_radian.setPixmap(QPixmap("degree"))
+      
+      
 def main():
     calc = QApplication(sys.argv)
     view = Calculator()
