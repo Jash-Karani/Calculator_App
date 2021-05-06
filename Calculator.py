@@ -195,8 +195,8 @@ class Calculator(QMainWindow):
     def menu(self):
         self.menu = self.menuBar().addMenu("Menu")
         self.menu.addAction('Trigonometry Calculator',self.trigo)
-        self.menu.addAction('Exit', self.close)
         self.menu.addAction('Help',self.help)
+        self.menu.addAction('Exit', self.close)
     
     def StatusBar(self):
         status = QStatusBar()
@@ -382,6 +382,7 @@ class Trigo_Window(QMainWindow):
    def __init__(self):
       self.expression_str=""
       self.trig_function_selected = ""
+      self.degree_or_radian = ""
       super().__init__()
       self.setWindowTitle('Trigo calculator')
       self.trig_layout = QVBoxLayout()
@@ -411,6 +412,7 @@ class Trigo_Window(QMainWindow):
 
       self.degree_radian = QLabel()
       self.degree_radian.setPixmap(QPixmap("degree"))
+      self.degree_or_radian = "degree"
 
    def button_create2(self):
       self.trig_layout2 = QGridLayout()
@@ -538,26 +540,36 @@ class Trigo_Window(QMainWindow):
       self.num_button14.setFixedSize(100,60)
       self.num_button14.setFont(self.font3)  
 
+      self.num_button15 =QPushButton("=")
+      self.num_button15.setFixedSize(100,60)
+      self.num_button15.setFont(self.font3)   
+
+      self.num_button16 =QPushButton("/")
+      self.num_button16.setFixedSize(85,60)
+      self.num_button16.setFont(self.font3)   
+
       self.trig_layout2.addWidget(self.input_box2,0,6,1,3)
       self.trig_layout2.addWidget(self.trig_status,0,5,1,1)
       self.trig_layout2.addWidget(self.degree_radian,0,9,1,2)
-      self.trig_layout2.addWidget(self.radian_button,4,0)
-      self.trig_layout2.addWidget(self.degree_button,4,1)
+      #self.trig_layout2.addWidget(self.radian_button,4,0)
+      #self.trig_layout2.addWidget(self.degree_button,4,1)
 
-      self.trig_layout2.addWidget(self.num_button1,1,5)
-      self.trig_layout2.addWidget(self.num_button2,1,6)
-      self.trig_layout2.addWidget(self.num_button3,1,7)
-      self.trig_layout2.addWidget(self.num_button10,1,8)
-      self.trig_layout2.addWidget(self.num_button4,2,5)
-      self.trig_layout2.addWidget(self.num_button5,2,6)
-      self.trig_layout2.addWidget(self.num_button6,2,7)
-      self.trig_layout2.addWidget(self.num_button12,2,8)
-      self.trig_layout2.addWidget(self.num_button7,3,5)
-      self.trig_layout2.addWidget(self.num_button8,3,6)
-      self.trig_layout2.addWidget(self.num_button9,3,7)
-      self.trig_layout2.addWidget(self.num_button11,3,8)
+      self.trig_layout2.addWidget(self.num_button16,1,5)
+      self.trig_layout2.addWidget(self.num_button1,1,6)
+      self.trig_layout2.addWidget(self.num_button2,1,7)
+      self.trig_layout2.addWidget(self.num_button3,1,8)
+      self.trig_layout2.addWidget(self.num_button10,4,7)
+      self.trig_layout2.addWidget(self.num_button4,2,6)
+      self.trig_layout2.addWidget(self.num_button5,2,7)
+      self.trig_layout2.addWidget(self.num_button6,2,8)
+      self.trig_layout2.addWidget(self.num_button12,4,8)
+      self.trig_layout2.addWidget(self.num_button7,3,6)
+      self.trig_layout2.addWidget(self.num_button8,3,7)
+      self.trig_layout2.addWidget(self.num_button9,3,8)
+      self.trig_layout2.addWidget(self.num_button11,4,6)
       self.trig_layout2.addWidget(self.num_button14,1,9,1,2)
       self.trig_layout2.addWidget(self.num_button13,2,9,2,2)
+      self.trig_layout2.addWidget(self.num_button15,4,9,1,2)      
 
       self.trig_layout.addLayout(self.trig_layout2)
 
@@ -589,6 +601,9 @@ class Trigo_Window(QMainWindow):
       self.trig_button11.clicked.connect(partial(self.trigo_brain,"cosec⁻¹θ"))
       self.trig_button12.clicked.connect(partial(self.trigo_brain,"sec⁻¹θ"))
 
+      self.num_button15.clicked.connect(self.expression_solver)
+      self.num_button14.clicked.connect(self.clear_display)      
+      
       self.degree_button.clicked.connect(self.radian_to_degree)
       self.radian_button.clicked.connect(self.degree_to_radian)
 
@@ -649,10 +664,28 @@ class Trigo_Window(QMainWindow):
 
    def degree_to_radian(self):
       self.degree_radian.setPixmap(QPixmap("radians"))
+      self.degree_or_radian = "radian"
    
    def radian_to_degree(self):
+      self.degree_or_radian = "degree"
       self.degree_radian.setPixmap(QPixmap("degree"))
-      
+
+   def keyPressEvent(self,event):
+      if event.key() == 16777220 or event.key() == 16777221:
+         self.expression_solver()
+      if event.key() == 16777216:
+         self.clear_display()
+   
+   def expression_solver(self):
+      pass 
+
+   def clear_display(self):
+      self.expression_str = ""
+      self.input_box2.setText('')
+      self.input_box2.setFocus()
+      self.trig_status.setPixmap(QPixmap("initial"))  
+
+
       
 def main():
     calc = QApplication(sys.argv)
