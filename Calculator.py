@@ -1,12 +1,10 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWidgets import QLabel
-from PyQt5.QtWidgets import QLineEdit,QCheckBox
+from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow
-from PyQt5.QtWidgets import QFormLayout
 from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QStatusBar
 from PyQt5.QtCore import *
@@ -19,6 +17,8 @@ from PyQt5.QtCore import Qt, QPoint, QRect, QSize, pyqtSignal
 from PyQt5 import QtGui
 import copy
 import math
+import matplotlib.pyplot as plt
+import numpy as np
 
 class Calculator(QMainWindow):
 
@@ -777,7 +777,12 @@ class Trigo_Window(QMainWindow):
          
       elif "𝝅" in operator_list:
          string_1=expression.replace("𝝅","")
-         sub_final = float(string_1)*math.pi
+         if string_1 == "":
+            string_2 = "1"
+         else:
+            string_2 = string_1
+
+         sub_final = float(string_2)*math.pi
                
       elif len(operator_list)==0:
          sub_final = float(expression)
@@ -799,8 +804,9 @@ class Quadratic_Window(QMainWindow):
    def __init__(self):
       super().__init__()
       self.setWindowTitle('Quadratic Calculator')
-      self.quad_layout = QVBoxLayout()
-      self.setFixedSize(950,400)
+      self.quad_layout = QHBoxLayout()
+      self.quad_layout1 = QVBoxLayout()
+      self.setFixedSize(400,400)
       self.main_widget3 = QWidget()
       self.setCentralWidget(self.main_widget3)
       self.main_widget3.setLayout(self.quad_layout)
@@ -809,11 +815,124 @@ class Quadratic_Window(QMainWindow):
       self.button_create3()
       self.control3()
 
-   def input_box_create3(self):
-      pass
+   def input_box_create3(self):        
+      
+      self.input_boxA=QLineEdit()
+      self.input_boxA.setFixedHeight(40)
+      self.font1 = self.input_boxA.font()     
+      self.font1.setPointSize(14)
+      self.input_boxA.setFont(self.font1) 
+      self.input_boxA.isReadOnly()
+      self.input_boxA.setAlignment(Qt.AlignLeft)
+      
+      self.A = QLabel("y=")
+      self.A.setFont(self.font1)
+
+      self.B = QLabel("x²+")
+      self.B.setFont(self.font1)
+
+      self.C = QLabel("x+")
+      self.C.setFont(self.font1)      
+
+      self.input_boxB=QLineEdit()
+      self.input_boxB.setFixedHeight(40)
+      self.input_boxB.setFont(self.font1)
+      self.input_boxB.isReadOnly()
+      self.input_boxB.setAlignment(Qt.AlignLeft)
+
+      self.input_boxC=QLineEdit()
+      self.input_boxC.setFixedHeight(40)
+      self.input_boxC.setFont(self.font1)      
+      self.input_boxC.isReadOnly()
+      self.input_boxC.setAlignment(Qt.AlignLeft)
+
+      self.quad_layout3 = QHBoxLayout()
+      self.quad_layout3.addWidget(self.A)
+      self.quad_layout3.addWidget(self.input_boxA)  
+      self.quad_layout3.addWidget(self.B)         
+      self.quad_layout3.addWidget(self.input_boxB)
+      self.quad_layout3.addWidget(self.C)
+      self.quad_layout3.addWidget(self.input_boxC)    
+
+
+      self.quad_layout1.addLayout(self.quad_layout3)
+      self.quad_layout.addLayout(self.quad_layout1)         
+
 
    def button_create3(self):
-      pass
+
+
+      self.quad_layout2 = QGridLayout()
+      
+      self.num_button1 = QPushButton("7")
+      self.num_button1.setFixedSize(85,60)
+      self.num_button1.setFont(self.font1)  
+
+      self.num_button2 =QPushButton("8")
+      self.num_button2.setFixedSize(85,60)
+      self.num_button2.setFont(self.font1)
+
+      self.num_button3 =QPushButton("9")
+      self.num_button3.setFixedSize(85,60)
+      self.num_button3.setFont(self.font1)
+
+      self.num_button4 =QPushButton("4")
+      self.num_button4.setFixedSize(85,60)
+      self.num_button4.setFont(self.font1)
+
+      self.num_button5 =QPushButton("5")
+      self.num_button5.setFixedSize(85,60)
+      self.num_button5.setFont(self.font1)
+
+      self.num_button6 =QPushButton("6")
+      self.num_button6.setFixedSize(85,60)
+      self.num_button6.setFont(self.font1)
+
+      self.num_button7 =QPushButton("1")
+      self.num_button7.setFixedSize(85,60)
+      self.num_button7.setFont(self.font1)
+
+      self.num_button8 =QPushButton("2")
+      self.num_button8.setFixedSize(85,60)
+      self.num_button8.setFont(self.font1)
+
+      self.num_button9 =QPushButton("3")
+      self.num_button9.setFixedSize(85,60)
+      self.num_button9.setFont(self.font1)
+
+      self.num_button10 =QPushButton("0")
+      self.num_button10.setFixedSize(85,60)
+      self.num_button10.setFont(self.font1)   
+
+      self.num_button11 =QPushButton(".")
+      self.num_button11.setFixedSize(85,60)
+      self.num_button11.setFont(self.font1)
+
+      self.num_button12 =QPushButton("-")
+      self.num_button12.setFixedSize(85,60)
+      self.num_button12.setFont(self.font1)   
+
+      self.num_button13 =QPushButton("=")
+      self.num_button13.setFixedSize(85,240)
+      self.num_button13.setFont(self.font1)  
+
+      self.quad_layout2.addWidget(self.num_button1,0,0)
+      self.quad_layout2.addWidget(self.num_button2,0,1)
+      self.quad_layout2.addWidget(self.num_button3,0,2)
+      self.quad_layout2.addWidget(self.num_button4,1,0)
+      self.quad_layout2.addWidget(self.num_button5,1,1)
+      self.quad_layout2.addWidget(self.num_button6,1,2)
+      self.quad_layout2.addWidget(self.num_button7,2,0)
+      self.quad_layout2.addWidget(self.num_button8,2,1)
+      self.quad_layout2.addWidget(self.num_button9,2,2)
+      self.quad_layout2.addWidget(self.num_button10,3,1)
+      self.quad_layout2.addWidget(self.num_button11,3,0)
+      self.quad_layout2.addWidget(self.num_button12,3,2) 
+      self.quad_layout2.addWidget(self.num_button13,0,3,4,1) 
+
+      self.quad_layout1.addLayout(self.quad_layout2)      
+      self.quad_layout.addLayout(self.quad_layout1) 
+      
 
    def control3(self):
       pass
