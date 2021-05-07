@@ -196,6 +196,7 @@ class Calculator(QMainWindow):
     def menu(self):
         self.menu = self.menuBar().addMenu("Menu")
         self.menu.addAction('Trigonometry Calculator',self.trigo)
+        self.menu.addAction('Quadratic Calculator',self.quadratic_calc)
         self.menu.addAction('Help',self.help)
         self.menu.addAction('Exit', self.close)
     
@@ -377,6 +378,10 @@ class Calculator(QMainWindow):
         self.trigo_object=Trigo_Window()
         self.trigo_object.show()
 
+    def quadratic_calc(self):
+       self.quad_object = Quadratic_Window()
+       self.quad_object.show()
+
 class Trigo_Window(QMainWindow):
    def __init__(self):
       self.expression_str=""
@@ -414,7 +419,6 @@ class Trigo_Window(QMainWindow):
       self.degree_radian = QLabel()
       self.degree_radian.setPixmap(QPixmap("degree.png"))
       self.degree_or_radian = "degree"
-
 
    def button_create2(self):
       self.trig_layout2 = QGridLayout()
@@ -790,6 +794,29 @@ class Trigo_Window(QMainWindow):
       self.input_box2.setText('')
       self.input_box2.setFocus()
       self.trig_status.setPixmap(QPixmap("initial"))  
+
+class Quadratic_Window(QMainWindow):
+   def __init__(self):
+      super().__init__()
+      self.setWindowTitle('Quadratic Calculator')
+      self.quad_layout = QVBoxLayout()
+      self.setFixedSize(950,400)
+      self.main_widget3 = QWidget()
+      self.setCentralWidget(self.main_widget3)
+      self.main_widget3.setLayout(self.quad_layout)
+
+      self.input_box_create3()
+      self.button_create3()
+      self.control3()
+
+   def input_box_create3(self):
+      pass
+
+   def button_create3(self):
+      pass
+
+   def control3(self):
+      pass
 
 
 
