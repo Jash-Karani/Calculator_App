@@ -388,7 +388,7 @@ class Trigo_Window(QMainWindow):
       super().__init__()
       self.setWindowTitle('Trigo calculator')
       self.trig_layout = QVBoxLayout()
-      self.setFixedSize(880,400)
+      self.setFixedSize(950,400)
       self.main_widget2 = QWidget()
       self.setCentralWidget(self.main_widget2)
       self.main_widget2.setLayout(self.trig_layout)
@@ -405,7 +405,7 @@ class Trigo_Window(QMainWindow):
       self.font4 = self.input_box2.font() 
       self.font2.setPointSize(14)
       self.font3.setPointSize(20)  
-      self.font4.setPointSize(9)           
+      self.font4.setPointSize(15)           
       self.input_box2.setFont(self.font2)
       self.input_box2.isReadOnly()
       self.input_box2.setAlignment(Qt.AlignLeft)
@@ -414,8 +414,9 @@ class Trigo_Window(QMainWindow):
       self.trig_status.setPixmap(QPixmap("initial.png"))      
 
       self.degree_radian = QLabel()
-      self.degree_radian.setPixmap(QPixmap("degree"))
+      self.degree_radian.setPixmap(QPixmap("degree.png"))
       self.degree_or_radian = "degree"
+
 
    def button_create2(self):
       self.trig_layout2 = QGridLayout()
@@ -468,7 +469,12 @@ class Trigo_Window(QMainWindow):
       self.trig_button12.setFont(self.font2)
 
       self.degree_button=QPushButton("degree(θ°)")
+      self.degree_button.setFixedSize(200,60)
+      self.degree_button.setFont(self.font4)
+
       self.radian_button=QPushButton("radian(θᶜ)")
+      self.radian_button.setFixedSize(200,60)  
+      self.radian_button.setFont(self.font4)          
 
       self.trig_layout2.addWidget(self.trig_button1,0,0)
       self.trig_layout2.addWidget(self.trig_button2,0,1)
@@ -484,7 +490,7 @@ class Trigo_Window(QMainWindow):
       self.trig_layout2.addWidget(self.trig_button12,3,2) 
 
       self.vertical_line = QLabel()
-      self.vertical_line.setText(" | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n | | | \n")   
+      self.vertical_line.setText("        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n        | | | \n")   
       self.trig_layout2.addWidget(self.vertical_line,0,3,4,1) 
 
       self.num_button1 = QPushButton("7")
@@ -548,14 +554,14 @@ class Trigo_Window(QMainWindow):
       self.num_button15.setFont(self.font3)   
 
       self.num_button16 =QPushButton("/")
-      self.num_button16.setFixedSize(85,60)
+      self.num_button16.setFixedSize(100,60)
       self.num_button16.setFont(self.font3)   
 
       self.trig_layout2.addWidget(self.input_box2,0,6,1,3)
-      self.trig_layout2.addWidget(self.trig_status,0,5,1,1)
-      self.trig_layout2.addWidget(self.degree_radian,0,9,1,2)
-      #self.trig_layout2.addWidget(self.radian_button,4,0)
-      #self.trig_layout2.addWidget(self.degree_button,4,1)
+      self.trig_layout2.addWidget(self.trig_status,0,9,1,2)
+      self.trig_layout2.addWidget(self.degree_radian,0,5,1,1)
+      self.trig_layout2.addWidget(self.radian_button,4,0,1,2)
+      self.trig_layout2.addWidget(self.degree_button,4,2,1,2)
 
       self.trig_layout2.addWidget(self.num_button16,1,5)
       self.trig_layout2.addWidget(self.num_button1,1,6)
@@ -731,7 +737,6 @@ class Trigo_Window(QMainWindow):
       
       self.input_box2.setText(str(ans))
 
-
    def expression_simplifier(self,expression):
       string1=""
       string2=""
@@ -773,7 +778,11 @@ class Trigo_Window(QMainWindow):
       self.trig_status.setPixmap(QPixmap("initial"))  
 
 
-      
+
+
+
+
+
 def main():
     calc = QApplication(sys.argv)
     view = Calculator()
