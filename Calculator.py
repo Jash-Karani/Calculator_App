@@ -364,7 +364,6 @@ class Calculator(QMainWindow):
        pass
 
     def help(self):
-       print("hi")
        msg = QMessageBox()
        msg.setFixedSize(400,400)
        msg.setWindowTitle("HELP")
@@ -420,6 +419,11 @@ class Trigo_Window(QMainWindow):
 
    def button_create2(self):
       self.trig_layout2 = QGridLayout()
+
+      self.space_filler = QLabel()
+      self.space_filler.setPixmap(QPixmap("space_fill"))
+      self.space_filler.setFixedSize(100,200)
+
       self.trig_button1 =QPushButton("tanθ")
       self.trig_button1.setFixedSize(100,60)
       self.trig_button1.setFont(self.font2)
@@ -562,6 +566,7 @@ class Trigo_Window(QMainWindow):
       self.trig_layout2.addWidget(self.degree_radian,0,5,1,1)
       self.trig_layout2.addWidget(self.radian_button,4,0,1,2)
       self.trig_layout2.addWidget(self.degree_button,4,2,1,2)
+      self.trig_layout2.addWidget(self.space_filler,2,5,3,1)
 
       self.trig_layout2.addWidget(self.num_button16,1,5)
       self.trig_layout2.addWidget(self.num_button1,1,6)
@@ -612,7 +617,6 @@ class Trigo_Window(QMainWindow):
       self.trig_button11.clicked.connect(partial(self.trigo_brain,"cosec⁻¹θ"))
       self.trig_button12.clicked.connect(partial(self.trigo_brain,"sec⁻¹θ"))
 
-      self.num_button15.clicked.connect(self.expression_solver)
       self.num_button14.clicked.connect(self.clear_display)      
       
       self.degree_button.clicked.connect(self.radian_to_degree)
@@ -695,14 +699,16 @@ class Trigo_Window(QMainWindow):
    
    def expression_solver(self):
       expression = self.expression_str
+      ans=0.0
       self.expression_str = ""
       self.input_box2.setText("")
       final_value = self.expression_simplifier(expression)
-      
+      print(final_value,self.trig_function_selected)
       if self.trig_function_selected == "sinθ":
          ans = math.sin(final_value)
 
       if self.trig_function_selected == "cosθ":
+         print("hi")
          ans = math.cos(final_value)
 
       if self.trig_function_selected == "tanθ":        
@@ -740,35 +746,53 @@ class Trigo_Window(QMainWindow):
    def expression_simplifier(self,expression):
       string1=""
       string2=""
+      string3=""
       finalstr =""
+      sub_final=0
       final=0
-      for i in expression:
-         if i=="𝝅" and expression.index(i)!=(len(expression)-1):
-            str_list = expression.split("𝝅")
-            for j in str_list:
-               try:
-                  y=j.index("/")
-                  string2=j
-                  finalstr = finalstr + string2
-               except:
-                  string1=str(float(j)*math.pi)
-                  finalstr = finalstr + string1
-         
-         elif i=="𝝅" and expression.index(i)==(len(expression)-1):
-            string1 = expression[:len(expression)-1]
-            if string1=="":
-               string1="1"
-            finalstr = str(float(string1)*math.pi)
-         
-         else:
-            finalstr = expression
-      
-      if self.degree_or_radian == "degree":
-         print(finalstr)
-         final = math.radians(float(finalstr))
-      else:
-         final = float(finalstr)
+      operator_list=[]
 
+      for l in expression:
+         if l in ["𝝅","/"]:
+            operator_list.append(l)
+
+      if "𝝅" and "/" in operator_list:
+         print("hi")
+         if operator_list.index("𝝅") < operator_list.index("/"):
+            string_1=expression.replace("𝝅","")
+            print(string1)
+            num_list = string_1.split("/")
+            if num_list[0]=="":
+               num_list[0]="1"
+            if num_list[1]=="":
+               num_list[1]="1"    
+            sub_final = math.pi*float(num_list[0])/float(num_list[1])
+         else:
+            string_1=expression.replace("𝝅","")
+            print(string1)
+            num_list = string_1.split("/")
+            if num_list[0]=="":
+               num_list[0]="1"
+            if num_list[1]=="":
+               num_list[1]="1"               
+            sub_final = (float(num_list[0])/float(num_list[1]))/math.pi
+         
+      elif "𝝅" in operator_list:
+         string_1=expression.replace("𝝅","")
+         sub_final = float(string_1)*math.pi
+               
+      elif len(operator_list)==0:
+         sub_final = float(expression)
+      
+      print(sub_final)
+      if self.degree_or_radian == "degree":
+         print("hi")
+         final = math.radians(float(sub_final))
+         print(final)
+      else:
+         final = float(sub_final)
+      
+      print(final)
       return(final)
 
    def clear_display(self):
