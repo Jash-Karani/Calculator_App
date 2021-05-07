@@ -374,7 +374,6 @@ class Calculator(QMainWindow):
        msg.exec_()
 
     def trigo(self):
-        print("trigo works")
         self.trigo_object=Trigo_Window()
         self.trigo_object.show()
 
@@ -703,12 +702,10 @@ class Trigo_Window(QMainWindow):
       self.expression_str = ""
       self.input_box2.setText("")
       final_value = self.expression_simplifier(expression)
-      print(final_value,self.trig_function_selected)
       if self.trig_function_selected == "sinθ":
          ans = math.sin(final_value)
 
       if self.trig_function_selected == "cosθ":
-         print("hi")
          ans = math.cos(final_value)
 
       if self.trig_function_selected == "tanθ":        
@@ -757,10 +754,8 @@ class Trigo_Window(QMainWindow):
             operator_list.append(l)
 
       if "𝝅" and "/" in operator_list:
-         print("hi")
          if operator_list.index("𝝅") < operator_list.index("/"):
             string_1=expression.replace("𝝅","")
-            print(string1)
             num_list = string_1.split("/")
             if num_list[0]=="":
                num_list[0]="1"
@@ -769,7 +764,6 @@ class Trigo_Window(QMainWindow):
             sub_final = math.pi*float(num_list[0])/float(num_list[1])
          else:
             string_1=expression.replace("𝝅","")
-            print(string1)
             num_list = string_1.split("/")
             if num_list[0]=="":
                num_list[0]="1"
@@ -784,15 +778,11 @@ class Trigo_Window(QMainWindow):
       elif len(operator_list)==0:
          sub_final = float(expression)
       
-      print(sub_final)
       if self.degree_or_radian == "degree":
-         print("hi")
          final = math.radians(float(sub_final))
-         print(final)
       else:
          final = float(sub_final)
       
-      print(final)
       return(final)
 
    def clear_display(self):
