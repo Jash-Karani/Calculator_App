@@ -18,6 +18,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize, pyqtSignal
 from PyQt5 import QtGui
 import copy
+import math
 
 class Calculator(QMainWindow):
 
@@ -383,6 +384,7 @@ class Trigo_Window(QMainWindow):
       self.expression_str=""
       self.trig_function_selected = ""
       self.degree_or_radian = ""
+      self.key_press = {"45":"-","46":".","47":"/","48":"0","49":"1","50":"2","51":"3","52":"4","53":"5","54":"6","55":"7","56":"8","57":"9"}
       super().__init__()
       self.setWindowTitle('Trigo calculator')
       self.trig_layout = QVBoxLayout()
@@ -405,6 +407,7 @@ class Trigo_Window(QMainWindow):
       self.font3.setPointSize(20)  
       self.font4.setPointSize(9)           
       self.input_box2.setFont(self.font2)
+      self.input_box2.isReadOnly()
       self.input_box2.setAlignment(Qt.AlignLeft)
 
       self.trig_status = QLabel()
@@ -574,19 +577,21 @@ class Trigo_Window(QMainWindow):
       self.trig_layout.addLayout(self.trig_layout2)
 
    def control2(self):
-      self.num_button1.clicked.connect(partial(self.expression_maker,"7"))
-      self.num_button2.clicked.connect(partial(self.expression_maker,"8"))
-      self.num_button3.clicked.connect(partial(self.expression_maker,"9"))
-      self.num_button4.clicked.connect(partial(self.expression_maker,"4"))
-      self.num_button5.clicked.connect(partial(self.expression_maker,"5"))
-      self.num_button6.clicked.connect(partial(self.expression_maker,"6"))
-      self.num_button7.clicked.connect(partial(self.expression_maker,"1"))
-      self.num_button8.clicked.connect(partial(self.expression_maker,"2"))
-      self.num_button9.clicked.connect(partial(self.expression_maker,"3"))
-      self.num_button10.clicked.connect(partial(self.expression_maker,"0"))
-      self.num_button13.clicked.connect(partial(self.expression_maker,"𝝅"))
-      self.num_button12.clicked.connect(partial(self.expression_maker,"-"))
-      self.num_button11.clicked.connect(partial(self.expression_maker,"."))
+      self.num_button1.clicked.connect(partial(self.inputbox_update,"7"))
+      self.num_button2.clicked.connect(partial(self.inputbox_update,"8"))
+      self.num_button3.clicked.connect(partial(self.inputbox_update,"9"))
+      self.num_button4.clicked.connect(partial(self.inputbox_update,"4"))
+      self.num_button5.clicked.connect(partial(self.inputbox_update,"5"))
+      self.num_button6.clicked.connect(partial(self.inputbox_update,"6"))
+      self.num_button7.clicked.connect(partial(self.inputbox_update,"1"))
+      self.num_button8.clicked.connect(partial(self.inputbox_update,"2"))
+      self.num_button9.clicked.connect(partial(self.inputbox_update,"3"))
+      self.num_button10.clicked.connect(partial(self.inputbox_update,"0"))
+      self.num_button13.clicked.connect(partial(self.inputbox_update,"𝝅"))
+      self.num_button12.clicked.connect(partial(self.inputbox_update,"-"))
+      self.num_button11.clicked.connect(partial(self.inputbox_update,"."))
+      self.num_button16.clicked.connect(partial(self.inputbox_update,"/"))
+      self.num_button15.clicked.connect(self.expression_solver)
 
       self.trig_button1.clicked.connect(partial(self.trigo_brain,"tanθ"))
       self.trig_button2.clicked.connect(partial(self.trigo_brain,"sinθ"))
@@ -607,13 +612,14 @@ class Trigo_Window(QMainWindow):
       self.degree_button.clicked.connect(self.radian_to_degree)
       self.radian_button.clicked.connect(self.degree_to_radian)
 
-   def expression_maker(self,button_pressed):
-      self.expression_str = self.expression_str + button_pressed
-      print(self.expression_str)
+   def inputbox_update(self,update_str):
+      if update_str == "pp":
+         self.expression_str = self.expression_str[:len(self.expression_str)-1]
+      else:
+         self.expression_str = self.expression_str + update_str
       self.input_box2.setText(self.expression_str)
-
+      
    def trigo_brain(self,button_pressed):
-      print(button_pressed)
       if button_pressed == "sinθ":
          self.trig_status.setPixmap(QPixmap("sin.png"))  
          self.trig_function_selected = "sinθ"
@@ -675,9 +681,90 @@ class Trigo_Window(QMainWindow):
          self.expression_solver()
       if event.key() == 16777216:
          self.clear_display()
+      for i in ["45","46","47","48","49","50","51","52","53","54","55","56","57"]:
+         if str(event.key()) == i:
+            self.inputbox_update(self.key_press[i])
+      if event.key() == 16777219:
+         self.inputbox_update("pp")
    
    def expression_solver(self):
-      pass 
+      expression = self.expression_str
+      self.expression_str = ""
+      self.input_box2.setText("")
+      final_value = self.expression_simplifier(expression)
+      
+      if self.trig_function_selected == "sinθ":
+         ans = math.sin(final_value)
+
+      if self.trig_function_selected == "cosθ":
+         ans = math.cos(final_value)
+
+      if self.trig_function_selected == "tanθ":        
+         ans = math.tan(final_value)
+
+      if self.trig_function_selected == "secθ":
+         ans = 1/math.cos(final_value)
+
+      if self.trig_function_selected == "cosecθ":
+         ans = 1/math.sin(final_value)
+
+      if self.trig_function_selected == "cotθ":
+         ans = 1/math.tan(final_value)
+
+      if self.trig_function_selected == "sin⁻¹θ":
+         ans = math.asin(final_value)
+         
+      if self.trig_function_selected == "cos⁻¹θ":
+         ans = math.acos(final_value)
+
+      if self.trig_function_selected == "tan⁻¹θ":
+         ans = math.atan(final_value)
+
+      if self.trig_function_selected == "sec⁻¹θ":
+         ans = math.acos(1/final_value)
+
+      if self.trig_function_selected == "cosec⁻¹θ":
+         ans = math.sin(1/final_value)
+
+      if self.trig_function_selected == "cot⁻¹θ":
+         ans = math.tan(1/final_value)       
+      
+      self.input_box2.setText(str(ans))
+
+
+   def expression_simplifier(self,expression):
+      string1=""
+      string2=""
+      finalstr =""
+      final=0
+      for i in expression:
+         if i=="𝝅" and expression.index(i)!=(len(expression)-1):
+            str_list = expression.split("𝝅")
+            for j in str_list:
+               try:
+                  y=j.index("/")
+                  string2=j
+                  finalstr = finalstr + string2
+               except:
+                  string1=str(float(j)*math.pi)
+                  finalstr = finalstr + string1
+         
+         elif i=="𝝅" and expression.index(i)==(len(expression)-1):
+            string1 = expression[:len(expression)-1]
+            if string1=="":
+               string1="1"
+            finalstr = str(float(string1)*math.pi)
+         
+         else:
+            finalstr = expression
+      
+      if self.degree_or_radian == "degree":
+         print(finalstr)
+         final = math.radians(float(finalstr))
+      else:
+         final = float(finalstr)
+
+      return(final)
 
    def clear_display(self):
       self.expression_str = ""
