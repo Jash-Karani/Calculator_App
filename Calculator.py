@@ -14,8 +14,8 @@ from PyQt5.QtWidgets import QWidget
 from functools import partial
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize, pyqtSignal
-from PyQt5 import QtGui
 import copy
+from PyQt5 import QtGui
 import math
 import matplotlib.pyplot as plt
 import numpy as np
@@ -802,11 +802,19 @@ class Trigo_Window(QMainWindow):
 
 class Quadratic_Window(QMainWindow):
    def __init__(self):
+      self.counter = 0
+      self.input_boxA_val=0
+      self.input_boxB_val=0
+      self.input_boxC_val=0   
+      self.root1=0
+      self.root2=0
+      self.factorized_form=""
+      self.vertex=0         
       super().__init__()
       self.setWindowTitle('Quadratic Calculator')
       self.quad_layout = QHBoxLayout()
       self.quad_layout1 = QVBoxLayout()
-      self.setFixedSize(400,400)
+      self.setFixedSize(1000,500)
       self.main_widget3 = QWidget()
       self.setCentralWidget(self.main_widget3)
       self.main_widget3.setLayout(self.quad_layout)
@@ -836,14 +844,14 @@ class Quadratic_Window(QMainWindow):
 
       self.input_boxB=QLineEdit()
       self.input_boxB.setFixedHeight(40)
+      self.input_boxB.setReadOnly(True)
       self.input_boxB.setFont(self.font1)
-      self.input_boxB.isReadOnly()
       self.input_boxB.setAlignment(Qt.AlignLeft)
 
       self.input_boxC=QLineEdit()
       self.input_boxC.setFixedHeight(40)
+      self.input_boxB.setReadOnly(True)
       self.input_boxC.setFont(self.font1)      
-      self.input_boxC.isReadOnly()
       self.input_boxC.setAlignment(Qt.AlignLeft)
 
       self.quad_layout3 = QHBoxLayout()
@@ -856,11 +864,9 @@ class Quadratic_Window(QMainWindow):
 
 
       self.quad_layout1.addLayout(self.quad_layout3)
-      self.quad_layout.addLayout(self.quad_layout1)         
-
+      self.quad_layout.addLayout(self.quad_layout1) 
 
    def button_create3(self):
-
 
       self.quad_layout2 = QGridLayout()
       
@@ -913,32 +919,131 @@ class Quadratic_Window(QMainWindow):
       self.num_button12.setFont(self.font1)   
 
       self.num_button13 =QPushButton("=")
-      self.num_button13.setFixedSize(85,240)
+      self.num_button13.setFixedSize(85,220)
       self.num_button13.setFont(self.font1)  
 
-      self.quad_layout2.addWidget(self.num_button1,0,0)
-      self.quad_layout2.addWidget(self.num_button2,0,1)
-      self.quad_layout2.addWidget(self.num_button3,0,2)
-      self.quad_layout2.addWidget(self.num_button4,1,0)
-      self.quad_layout2.addWidget(self.num_button5,1,1)
-      self.quad_layout2.addWidget(self.num_button6,1,2)
-      self.quad_layout2.addWidget(self.num_button7,2,0)
-      self.quad_layout2.addWidget(self.num_button8,2,1)
-      self.quad_layout2.addWidget(self.num_button9,2,2)
-      self.quad_layout2.addWidget(self.num_button10,3,1)
-      self.quad_layout2.addWidget(self.num_button11,3,0)
-      self.quad_layout2.addWidget(self.num_button12,3,2) 
-      self.quad_layout2.addWidget(self.num_button13,0,3,4,1) 
+      self.num_button14 =QPushButton("C")
+      self.num_button14.setFixedSize(85,60)
+      self.num_button14.setFont(self.font1) 
+
+      self.num_button15 =QPushButton("Enter Input or → key")
+      self.num_button15.setFixedSize(370,40)
+      self.num_button15.setFont(self.font1) 
+
+      self.quad_layout2.addWidget(self.num_button15,0,0,1,4)
+      self.quad_layout2.addWidget(self.num_button1,1,0)
+      self.quad_layout2.addWidget(self.num_button2,1,1)
+      self.quad_layout2.addWidget(self.num_button3,1,2)
+      self.quad_layout2.addWidget(self.num_button4,2,0)
+      self.quad_layout2.addWidget(self.num_button5,2,1)
+      self.quad_layout2.addWidget(self.num_button6,2,2)
+      self.quad_layout2.addWidget(self.num_button7,3,0)
+      self.quad_layout2.addWidget(self.num_button8,3,1)
+      self.quad_layout2.addWidget(self.num_button9,3,2)
+      self.quad_layout2.addWidget(self.num_button10,4,1)
+      self.quad_layout2.addWidget(self.num_button11,4,0)
+      self.quad_layout2.addWidget(self.num_button12,4,2) 
+      self.quad_layout2.addWidget(self.num_button13,2,3,3,1) 
+      self.quad_layout2.addWidget(self.num_button14,1,3) 
 
       self.quad_layout1.addLayout(self.quad_layout2)      
       self.quad_layout.addLayout(self.quad_layout1) 
       
-
    def control3(self):
-      pass
+      self.num_button1.clicked.connect(partial(self.inputbox_update,"7"))
+      self.num_button2.clicked.connect(partial(self.inputbox_update,"8"))
+      self.num_button3.clicked.connect(partial(self.inputbox_update,"9"))
+      self.num_button4.clicked.connect(partial(self.inputbox_update,"4"))
+      self.num_button5.clicked.connect(partial(self.inputbox_update,"5"))
+      self.num_button6.clicked.connect(partial(self.inputbox_update,"6"))
+      self.num_button7.clicked.connect(partial(self.inputbox_update,"1"))
+      self.num_button8.clicked.connect(partial(self.inputbox_update,"2"))
+      self.num_button9.clicked.connect(partial(self.inputbox_update,"3"))
+      self.num_button10.clicked.connect(partial(self.inputbox_update,"0"))
+      self.num_button11.clicked.connect(partial(self.inputbox_update,"."))
+      self.num_button12.clicked.connect(partial(self.inputbox_update,"-"))  
+      self.num_button13.clicked.connect(self.quad_calc)           
+      self.num_button14.clicked.connect(self.clear)   
+      self.num_button15.clicked.connect(partial(self.inputbox_lock,"-"))   
 
+   def clear(self):
+      self.input_boxA.setText("")
+      self.input_boxB.setText("")
+      self.input_boxC.setText("")
+      self.counter=0
 
+   def inputbox_update(self,input_str):
+      if self.counter == 0:
+         expression = self.input_boxA.text()
+         expression = expression + input_str
+         self.input_boxA.setText(expression)
+         expression=""
+      
+      if self.counter == 1:
+         expression = self.input_boxB.text()
+         expression = expression + input_str
+         self.input_boxB.setText(expression)
+         expression=""      
+      
+      if self.counter == 2:
+         expression = self.input_boxC.text()
+         expression = expression + input_str
+         self.input_boxC.setText(expression)
+         expression=""
 
+   def inputbox_lock(self,input_str):
+      if self.counter == 0:
+         self.input_boxA.setReadOnly(True)
+         self.input_boxB.setReadOnly(False)
+         self.counter=self.counter+1
+      elif self.counter == 1:
+         self.input_boxB.setReadOnly(True)
+         self.input_boxC.setReadOnly(False)
+         self.counter=self.counter+1
+      else:
+         self.input_boxC.setReadOnly(True)
+   
+   def quad_calc(self):
+      if self.input_boxA.text() == "":
+         self.input_boxA_val = 0
+      else:
+         self.input_boxA_val = float(self.input_boxA.text())
+      
+      if self.input_boxB.text() == "":
+         self.input_boxB_val = 0
+      else:
+         self.input_boxB_val = float(self.input_boxB.text())         
+      
+      if self.input_boxC.text() == "":
+         self.input_boxC_val = 0
+      else:
+         self.input_boxC_val = float(self.input_boxC.text())
+
+      a = self.input_boxA_val
+      b = self.input_boxB_val
+      c = self.input_boxC_val
+      d = (b**2)-(4*a*c)
+      
+      if d>=0:
+         x1 = ((b*-1)+(d**0.5))/2*a
+         x2 = ((b*-1)-(d**0.5))/2*a
+
+         self.root1 = x1
+         self.root2 = x2
+
+         self.factorized_form = "(x"+(-1*x1)+")(x"+(-1*x2)+")"
+
+         self.vertex = (-1*b)/(2*a)
+         self.max_min = (-1*d)/(4*a)
+
+         self.graph_gen(1)
+      
+   def graph_gen(self,checker=0):
+      if checker == 1:
+         pass
+      else:
+         pass
+      
 
 
 
