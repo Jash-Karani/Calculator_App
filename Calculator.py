@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QVBoxLayout
@@ -809,12 +810,14 @@ class Quadratic_Window(QMainWindow):
       self.root1=0
       self.root2=0
       self.factorized_form=""
-      self.vertex=0         
+      self.vertex_float=0    
+      self.key_press = {"45":"-","46":".","47":"/","48":"0","49":"1","50":"2","51":"3","52":"4","53":"5","54":"6","55":"7","56":"8","57":"9"}     
       super().__init__()
       self.setWindowTitle('Quadratic Calculator')
       self.quad_layout = QHBoxLayout()
       self.quad_layout1 = QVBoxLayout()
-      self.setFixedSize(1000,500)
+      self.quad_layout4 = QVBoxLayout()
+      self.setFixedSize(1000,700)
       self.main_widget3 = QWidget()
       self.setCentralWidget(self.main_widget3)
       self.main_widget3.setLayout(self.quad_layout)
@@ -822,6 +825,7 @@ class Quadratic_Window(QMainWindow):
       self.input_box_create3()
       self.button_create3()
       self.control3()
+      self.graph_labels()
 
    def input_box_create3(self):        
       
@@ -829,6 +833,8 @@ class Quadratic_Window(QMainWindow):
       self.input_boxA.setFixedHeight(40)
       self.font1 = self.input_boxA.font()     
       self.font1.setPointSize(14)
+      self.font2 = self.input_boxA.font()     
+      self.font2.setPointSize(10)
       self.input_boxA.setFont(self.font1) 
       self.input_boxA.isReadOnly()
       self.input_boxA.setAlignment(Qt.AlignLeft)
@@ -862,6 +868,9 @@ class Quadratic_Window(QMainWindow):
       self.quad_layout3.addWidget(self.C)
       self.quad_layout3.addWidget(self.input_boxC)    
 
+      self.fill2 = QLabel()
+      self.fill2.setFixedHeight(200)
+      self.fill2.setPixmap(QPixmap("space_fill2.png"))
 
       self.quad_layout1.addLayout(self.quad_layout3)
       self.quad_layout.addLayout(self.quad_layout1) 
@@ -926,8 +935,8 @@ class Quadratic_Window(QMainWindow):
       self.num_button14.setFixedSize(85,60)
       self.num_button14.setFont(self.font1) 
 
-      self.num_button15 =QPushButton("Enter Input or → key")
-      self.num_button15.setFixedSize(370,40)
+      self.num_button15 =QPushButton("CLick to confirm Input or press Shift key")
+      self.num_button15.setFixedSize(430,40)
       self.num_button15.setFont(self.font1) 
 
       self.quad_layout2.addWidget(self.num_button15,0,0,1,4)
@@ -945,10 +954,40 @@ class Quadratic_Window(QMainWindow):
       self.quad_layout2.addWidget(self.num_button12,4,2) 
       self.quad_layout2.addWidget(self.num_button13,2,3,3,1) 
       self.quad_layout2.addWidget(self.num_button14,1,3) 
+      self.quad_layout2.addWidget(self.fill2,5,0,1,4)
 
       self.quad_layout1.addLayout(self.quad_layout2)      
       self.quad_layout.addLayout(self.quad_layout1) 
       
+   def graph_labels(self):
+      self.divide=QLabel()
+      self.divide.setText(" | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n | \n")
+      self.quad_layout.addWidget(self.divide)
+
+      self.roots=QLabel()
+      self.roots.setText("Roots are: Please provide input first")
+      self.roots.setFont(self.font2)
+      self.factorised=QLabel()
+      self.factorised.setText("Factorised form: Please provide input first")
+      self.factorised.setFont(self.font2)
+      self.vertex=QLabel()
+      self.vertex.setText("Vertex: Please Provide input first")
+      self.vertex.setFont(self.font2)
+      self.maxima_minima=QLabel()
+      self.maxima_minima.setText("Please enter input to get maxima/minima")
+      self.maxima_minima.setFont(self.font2)
+      self.graph_plot=QLabel()
+      self.graph_gen(0)
+      self.graph_plot.setPixmap(QPixmap("graph.png"))
+
+      
+      self.quad_layout4.addWidget(self.roots)
+      self.quad_layout4.addWidget(self.factorised)
+      self.quad_layout4.addWidget(self.vertex)
+      self.quad_layout4.addWidget(self.maxima_minima)
+      self.quad_layout4.addWidget(self.graph_plot)
+      self.quad_layout.addLayout(self.quad_layout4)
+
    def control3(self):
       self.num_button1.clicked.connect(partial(self.inputbox_update,"7"))
       self.num_button2.clicked.connect(partial(self.inputbox_update,"8"))
@@ -971,6 +1010,15 @@ class Quadratic_Window(QMainWindow):
       self.input_boxB.setText("")
       self.input_boxC.setText("")
       self.counter=0
+      self.roots.setText("Roots are: Please provide input first")
+      self.factorised.setText("Factorised form: Please provide input first")
+      self.vertex.setText("Vertex: Please Provide input first")
+      self.maxima_minima.setText("Please enter input to get maxima/minima")
+      try:
+         os.remove("graph.png")
+      except:
+         pass
+      self.graph_gen(0)
 
    def inputbox_update(self,input_str):
       if self.counter == 0:
@@ -1000,9 +1048,22 @@ class Quadratic_Window(QMainWindow):
          self.input_boxB.setReadOnly(True)
          self.input_boxC.setReadOnly(False)
          self.counter=self.counter+1
-      else:
+      elif self.counter ==2:
          self.input_boxC.setReadOnly(True)
+         self.counter=0
    
+   def keyPressEvent(self,event):
+      if event.key() == 16777220 or event.key() == 16777221:
+         self.quad_calc()
+      if event.key() == 16777216:
+         self.clear()
+      if event.key() == 16777248:
+         self.inputbox_lock("b")
+      for i in ["45","46","47","48","49","50","51","52","53","54","55","56","57"]:
+         if str(event.key()) == i:
+            self.inputbox_update(self.key_press[i])
+      print(event.key())
+
    def quad_calc(self):
       if self.input_boxA.text() == "":
          self.input_boxA_val = 0
@@ -1024,26 +1085,63 @@ class Quadratic_Window(QMainWindow):
       c = self.input_boxC_val
       d = (b**2)-(4*a*c)
       
-      if d>=0:
+      if d>=0 and a!=0:
          x1 = ((b*-1)+(d**0.5))/2*a
          x2 = ((b*-1)-(d**0.5))/2*a
 
          self.root1 = x1
          self.root2 = x2
 
-         self.factorized_form = "(x"+(-1*x1)+")(x"+(-1*x2)+")"
+         self.factorized_form = "(x"+str(-1*x1)+")(x"+str(-1*x2)+")"
 
-         self.vertex = (-1*b)/(2*a)
+         self.vertex_float = (-1*b)/(2*a)
          self.max_min = (-1*d)/(4*a)
-
+         
+         self.roots.setText("Roots are: x1="+str(self.root1)+"\n                 x2:"+str(self.root2))
+         self.factorised.setText("Factorised form is: "+self.factorized_form)
+         self.vertex.setText("Vertex is: "+str(self.vertex_float))
+         if a>0:
+            self.maxima_minima.setText("Minima is: "+str(self.max_min))
+         else:
+            self.maxima_minima.setText("Maxima is: "+str(self.max_min))
          self.graph_gen(1)
+      else:
+         self.graph_gen(69)
       
    def graph_gen(self,checker=0):
       if checker == 1:
-         pass
-      else:
-         pass
+         os.remove("graph.png")
+         x = np.linspace(-2+self.vertex_float, self.vertex_float+2, 100)
+         y = self.input_boxA_val*(x**2) + self.input_boxB_val*x +self.input_boxC_val
+         fig1 = plt.figure(figsize = (5, 5))         
+         plt.plot(x, y)
+         plt.savefig("graph.png")
+         self.graph_plot.setPixmap(QPixmap("graph.png"))  
+
+      elif checker == 0:
+         try:
+            os.remove("graph.png")
+         except:
+            pass
+         x=0
+         y=0
+         fig = plt.figure(figsize = (5, 5))         
+         plt.plot(x, y)
+         plt.savefig("graph.png")	
+         self.graph_plot.setPixmap(QPixmap("graph.png"))  
       
+      elif checker == 69:
+         self.roots.setText("Roots are: NA")
+         self.factorised.setText("Factorised form: NA")
+         self.vertex.setText("Vertex: NA")
+         self.maxima_minima.setText("Maxima/minima: NA")
+         try:
+            os.remove("graph.png")
+         except:
+            pass
+         self.graph_plot.setPixmap(QPixmap("no_graph.png"))  
+
+         
 
 
 
