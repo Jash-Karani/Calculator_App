@@ -753,7 +753,7 @@ class Trigo_Window(QMainWindow):
       sub_final=0
       final=0
       operator_list=[]
-
+      expression = expression.replace(" ","")
       for l in expression:
          if l in ["𝝅","/"]:
             operator_list.append(l)
