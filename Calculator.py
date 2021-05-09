@@ -1065,9 +1065,10 @@ class Quadratic_Window(QMainWindow):
       for i in ["45","46","47","48","49","50","51","52","53","54","55","56","57"]:
          if str(event.key()) == i:
             self.inputbox_update(self.key_press[i])
-      print(event.key())
 
    def quad_calc(self):
+      str_1=""
+      str_2=""
       if self.input_boxA.text() == "":
          self.input_boxA_val = 0
       else:
@@ -1095,7 +1096,22 @@ class Quadratic_Window(QMainWindow):
          self.root1 = x1
          self.root2 = x2
 
-         self.factorized_form = "(x"+str(-1*x1)+")(x"+str(-1*x2)+")"
+
+         if x1 >0:
+            
+            str_1="-"+str(abs(x1))
+         else:
+            str_1="+"+str(abs(x1))
+
+         if x2 >0:
+            str_2="-"+str(abs(x2))
+         else:
+            str_2="+"+str(abs(x2))
+         
+
+
+
+         self.factorized_form = "(x"+str_1+")(x"+str_2+")"
 
          self.vertex_float = (-1*b)/(2*a)
          self.max_min = (-1*d)/(4*a)
